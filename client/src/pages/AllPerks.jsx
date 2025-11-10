@@ -30,6 +30,20 @@ export default function AllPerks() {
 
 */
 
+  useEffect(() => {
+    // Load all perks when component mounts
+    loadAllPerks()
+    // Empty dependency array means this effect runs only once on mount
+  }, []) // []
+
+  useEffect(() => {
+    // Debounce timer ID
+    const delayDebounceFn = setTimeout(() => {
+      // Load perks after 500ms of no input changes
+      loadAllPerks()
+    }, 1000)
+    return () => clearTimeout(delayDebounceFn)}, [searchQuery, merchantFilter]) // 500ms delay
+
   
   useEffect(() => {
     // Extract all merchant names from perks array
@@ -136,6 +150,7 @@ export default function AllPerks() {
                 type="text"
                 className="input"
                 placeholder="Enter perk name..."
+                onChange={e => setSearchQuery(e.target.value)}
                 
               />
               <p className="text-xs text-zinc-500 mt-1">
@@ -151,6 +166,7 @@ export default function AllPerks() {
               </label>
               <select
                 className="input"
+                onChange={e => setMerchantFilter(e.target.value)}
                 
               >
                 <option value="">All Merchants</option>
